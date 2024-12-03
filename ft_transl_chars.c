@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 16:05:09 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/11/28 17:03:44 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/02 17:24:29 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ char	*translate_s(char *str, char *s)
 	else
 		result = s;
 	result = ft_strjoin(result, ft_substr(str, 1, ft_strlen(str) - 1));
-
+	return (result);
 }

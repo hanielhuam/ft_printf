@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:49:10 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/11/28 17:03:51 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/02 17:48:30 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_list	*to_t_list(char **matrix, int first)
 	t_list	*list;
 	t_print	*print;
 	
-	list = NULL;
+	malloc	list = NULL;
 	if (!first)
 	{
 		print = (t_print *)malloc(sizeof(t_print));
@@ -59,14 +59,6 @@ t_list	*to_t_list(char **matrix, int first)
 	return (list);
 }
 
-char	*translate_d(char *str, int n)
-{
-	char	*result;
-
-	result = ft_itoa(n);
-	result = ft_strjoin(result, ft_substr(str, 1, ft_strlen(str) - 1));
-	return (result);
-}
 
 void	translate(t_list *list, va_list args)
 {
@@ -85,7 +77,9 @@ void	translate(t_list *list, va_list args)
 			if (print->comand->type == 'i')
 				print->replaciment = translate_d(print->original, va_arg(args, int));
 			if (print->comand->type == 'u')
-				print->replaciment = translate_d(print->original, va_arg(args, unsigned int));
+				print->replaciment = translate_ud(print->original, va_arg(args, unsigned int));
+			if (print->comand->type == 's')
+				print->replaciment = trsnlate_s(print->original, va_arg(args, char *));
 		}
 		else
 			print->replaciment = print->original;
@@ -166,4 +160,4 @@ int	main(void)
 	ft_printf("%dHaniel%uHuam%iMacedo%cFerreira%%", 32, 42, 52, ' ');
 	//printf("Haniel%H\n", 1);
 	return (0);
-}
+

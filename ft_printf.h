@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:24:26 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/11/28 17:03:54 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:32:32 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_comand
 
 int		ft_printf(const char *format, ...);
 char	*translate_c(char *str, int c);
+char	*translate_s(char *str, char *s);
 
 #endif
 
