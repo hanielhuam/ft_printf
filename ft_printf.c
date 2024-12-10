@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:49:10 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/02 17:48:30 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:21:45 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,20 @@ t_list	*to_t_list(char **matrix, int first)
 void	translate(t_list *list, va_list args)
 {
 	t_print	*print;
+	char	type;
+
 	while (list)
 	{
 		print = (t_print *) list->content;
 		if (print->comand)
 		{
-			if (print->comand->type == 'c')
-				print->replaciment = translate_c(print->original, va_arg(args, int));
-			if (print->comand->type == '%')
-				print->replaciment = translate_c(print->original, '%');
-			if (print->comand->type == 'd')
-				print->replaciment = translate_d(print->original, va_arg(args, int));
-			if (print->comand->type == 'i')
-				print->replaciment = translate_d(print->original, va_arg(args, int));
-			if (print->comand->type == 'u')
-				print->replaciment = translate_ud(print->original, va_arg(args, unsigned int));
-			if (print->comand->type == 's')
-				print->replaciment = trsnlate_s(print->original, va_arg(args, char *));
+			type = print->comand->type;
+			if (type == 'c' || type == '%' || type == 's')
+				print->replaciment = translate_characters(print, args, type);
+			if (type == 'd' || type == 'i')
+				print->replaciment = translate_digits(print, args, type);
+			if (type == 'u' || type == 'x' || type == 'X' || type == 'p')
+				print->replaciment = translate_udigits(print, args, type);
 		}
 		else
 			print->replaciment = print->original;
