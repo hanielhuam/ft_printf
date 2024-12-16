@@ -6,61 +6,41 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:49:10 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/09 21:21:45 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:04:46 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-t_comand	*create_comand(char c)
-{
-	t_comand	*comand;
-	
-	comand = (t_comand *)malloc(sizeof(t_comand) * 1);
-	if (!comand)
-		return (NULL);
-	comand->type = c;
-	return (comand);
-}
-
-t_comand	*which_comand(char c)
-{
-	if (ft_strchr("cspdiuxX%", c))
-		return create_comand(c);
-	else
-		return (NULL);
-}
-
-t_print	*creat_print(char *str)
-{
-	t_print	*print;
-	
-	print = (t_print *)malloc(sizeof(t_print) * 1);
-	print->original = str;
-	print->comand = which_comand(*str);
-	return (print);
-}
 
 t_list	*to_t_list(char **matrix, int first)
 {
 	t_list	*list;
 	t_print	*print;
 	
-	malloc	list = NULL;
+	list = NULL;
 	if (!first)
 	{
 		print = (t_print *)malloc(sizeof(t_print));
-		print->original = *matrix++;
+		if (!print)
+			return (NULL);
+		print->original = ft_strdup(*matrix++);
 		print->comand = NULL;
 		ft_lstadd_back(&list, ft_lstnew(print));
 	}
 	while (*matrix)
-		ft_lstadd_back(&list, ft_lstnew(creat_print(*matrix++)));
+	{
+		print = create_print(*matrix++);
+		if (!print)
+		{
+			ft_lstclear(&list, del_print);
+			return (NULL);
+		}
+		ft_lstadd_back(&list, ft_lstnew(print));
+	}
 	return (list);
 }
 
-
-void	translate(t_list *list, va_list args)
+int	translate(t_list *list, va_list args)
 {
 	t_print	*print;
 	char	type;
@@ -74,21 +54,25 @@ void	translate(t_list *list, va_list args)
 			if (type == 'c' || type == '%' || type == 's')
 				print->replaciment = translate_characters(print, args, type);
 			if (type == 'd' || type == 'i')
-				print->replaciment = translate_digits(print, args, type);
+				print->replaciment = translate_digits(print, args);
 			if (type == 'u' || type == 'x' || type == 'X' || type == 'p')
 				print->replaciment = translate_udigits(print, args, type);
 		}
 		else
-			print->replaciment = print->original;
+			print->replaciment = ft_strdup(print->original);
+		if(!print->replaciment)
+			return (-1);
 		list = list->next;
 	}
+	return (0);
 }
 
 int	show(t_list *list)
 {
 	char	*result;
+	char	*temp;
 	t_print	*print;
-	int	count;
+	int		count;
 
 	print = (t_print *)list->content;
 	result = ft_strdup(print->replaciment);
@@ -96,15 +80,37 @@ int	show(t_list *list)
 	while(list)
 	{
 		print = (t_print *)list->content;
-		result = ft_strjoin(result, print->replaciment);
+		temp = result;
+		result = ft_strjoin(temp, print->replaciment);
+		free(temp);
 		list = list->next;
 	}
 	count = ft_strlen(result);
 	write(1, result, count);
+	free(result);
 	return (count);
 }
 
-int     ft_printf(const char *format, ...)
+int	translation(char **matrix, t_list *list, va_list args)
+{
+	int		count;
+	char	**matrix_temp;
+	int		error;
+
+	error = translate(list, args);
+	va_end(args);
+	count = -1;
+	if (!error)
+		count = show(list);
+	ft_lstclear(&list, del_print);
+	matrix_temp = matrix;
+	while (*matrix)
+		free(*matrix++);
+	free(matrix_temp);
+	return (count);
+}
+
+int	ft_printf(const char *format, ...)
 {
 	char	first;
 	char	**matrix;
@@ -122,10 +128,15 @@ int     ft_printf(const char *format, ...)
 	if (!*matrix[0])
 		return (-1);
 	list_print = to_t_list(matrix, first);
+	if (!list_print)
+	{
+		while (*matrix)
+			free(*matrix++);
+		free(matrix);
+		return -1;
+	}
 	va_start(args, format);
-	translate(list_print, args);
-	va_end(args);
-	return (show(list_print));
+	return (translation(matrix, list_print, args));
 }
 
 #include <stdio.h>
@@ -151,10 +162,3 @@ void	show_list(t_list *list)
 		list = list->next;
 	}
 }
-
-int	main(void)
-{	
-	ft_printf("%dHaniel%uHuam%iMacedo%cFerreira%%", 32, 42, 52, ' ');
-	//printf("Haniel%H\n", 1);
-	return (0);
-

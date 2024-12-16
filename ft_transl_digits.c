@@ -6,26 +6,27 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 17:40:49 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/02 18:45:19 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:28:18 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*translate_d(char *str, int n)
+static	char	*translate_d(char *str, int n)
 {
+	char	*number;
+	char	*sub;
 	char	*result;
 
-	result = ft_itoa(n);
-	result = ft_strjoin(result, ft_substr(str, 1, ft_strlen(str) - 1));
+	number = ft_litoa_base((long int) n, BASE_10);
+	sub = ft_substr(str, 1, ft_strlen(str) - 1);
+	result = ft_strjoin(number, sub);
+	free(number);
+	free(sub);
 	return (result);
 }
 
-char	*translate_ud(char *str, unsigned int)
+char	*translate_digits(t_print *print, va_list args)
 {
-	char	*result;
-
-	result = ft_uitoa(n);
-	result = ft_strjoin(result, ft_substr(str, 1, ft_strlen(str) - 1));
-	return (result);
+	return translate_d(print->original, va_arg(args, int));
 }
