@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:40:48 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/15 16:16:43 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:46:59 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static t_comand	*create_comand(char c)
 {
 	t_comand	*comand;
-	
+
 	comand = (t_comand *)malloc(sizeof(t_comand) * 1);
 	if (!comand)
 		return (NULL);
@@ -26,7 +26,7 @@ static t_comand	*create_comand(char c)
 static t_comand	*which_comand(char c)
 {
 	if (ft_strchr("cspdiuxX%", c))
-		return create_comand(c);
+		return (create_comand(c));
 	else
 		return (NULL);
 }
@@ -34,7 +34,7 @@ static t_comand	*which_comand(char c)
 t_print	*create_print(char *str)
 {
 	t_print	*print;
-	
+
 	print = (t_print *)malloc(sizeof(t_print) * 1);
 	if (!print)
 		return (NULL);

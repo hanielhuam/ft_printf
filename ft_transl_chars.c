@@ -6,24 +6,23 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 16:05:09 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/15 18:15:24 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:57:40 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static char	*translate_c(char *str, int c)
+static char	*translate_c(t_print *print, int c)
 {
 	char	*dup;
 
-	if (!c)
-		return ft_substr(str, 1, ft_strlen(str) - 1);
-	dup = ft_strdup(str);
+	dup = ft_strdup(print->original);
+	print->size = ft_strlen(dup);
 	dup[0] = c;
 	return (dup);
 }
 
-static char	*translate_s(char *str, char *s)
+static char	*translate_s(t_print *print, char *s)
 {
 	char	*temp;
 	char	*sub;
@@ -33,8 +32,9 @@ static char	*translate_s(char *str, char *s)
 		temp = ft_strdup("(null)");
 	else
 		temp = ft_strdup(s);
-	sub = ft_substr(str, 1, ft_strlen(str) - 1);
+	sub = ft_substr(print->original, 1, ft_strlen(print->original) - 1);
 	result = ft_strjoin(temp, sub);
+	print->size = ft_strlen(result);
 	free(temp);
 	free(sub);
 	return (result);
@@ -43,10 +43,14 @@ static char	*translate_s(char *str, char *s)
 char	*translate_characters(t_print *print, va_list args, char type)
 {
 	if (type == 'c')
-		return translate_c(print->original, va_arg(args, int));
+		return (translate_c(print, va_arg(args, int)));
 	if (type == '%')
-		return translate_c(print->original, '%');
+		return (translate_c(print, '%'));
 	if (type == 's')
-		return translate_s(print->original, va_arg(args, char*));
-	return (ft_strdup(print->original));
+		return (translate_s(print, va_arg(args, char *)));
+	else
+	{
+		print->size = ft_strlen(print->original);
+		return (ft_strdup(print->original));
+	}
 }

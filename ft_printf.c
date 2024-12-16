@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:49:10 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/15 16:04:46 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/16 19:56:42 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_list	*to_t_list(char **matrix, int first)
 {
 	t_list	*list;
 	t_print	*print;
-	
+
 	list = NULL;
 	if (!first)
 	{
@@ -47,7 +47,7 @@ int	translate(t_list *list, va_list args)
 
 	while (list)
 	{
-		print = (t_print *) list->content;
+		print = list->content;
 		if (print->comand)
 		{
 			type = print->comand->type;
@@ -59,8 +59,8 @@ int	translate(t_list *list, va_list args)
 				print->replaciment = translate_udigits(print, args, type);
 		}
 		else
-			print->replaciment = ft_strdup(print->original);
-		if(!print->replaciment)
+			print->replaciment = translate_no(print);
+		if (!print->replaciment)
 			return (-1);
 		list = list->next;
 	}
@@ -69,25 +69,16 @@ int	translate(t_list *list, va_list args)
 
 int	show(t_list *list)
 {
-	char	*result;
-	char	*temp;
 	t_print	*print;
 	int		count;
 
-	print = (t_print *)list->content;
-	result = ft_strdup(print->replaciment);
-	list = list->next;
-	while(list)
+	count = 0;
+	while (list)
 	{
-		print = (t_print *)list->content;
-		temp = result;
-		result = ft_strjoin(temp, print->replaciment);
-		free(temp);
+		print = list->content;
+		count += write(1, print->replaciment, print->size);
 		list = list->next;
 	}
-	count = ft_strlen(result);
-	write(1, result, count);
-	free(result);
 	return (count);
 }
 
@@ -133,12 +124,12 @@ int	ft_printf(const char *format, ...)
 		while (*matrix)
 			free(*matrix++);
 		free(matrix);
-		return -1;
+		return (-1);
 	}
 	va_start(args, format);
 	return (translation(matrix, list_print, args));
 }
-
+/*
 #include <stdio.h>
 
 void	show_matrix(char **matrix)
@@ -161,4 +152,4 @@ void	show_list(t_list *list)
 			printf("comand: (nill)\n");
 		list = list->next;
 	}
-}
+}*/

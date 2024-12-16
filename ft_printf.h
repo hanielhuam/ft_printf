@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:24:26 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/14 15:06:02 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/16 20:03:32 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_print
 {
 	char			*original;
 	char			*replaciment;
+	int				size;
 	struct s_comand	*comand;
 }					t_print;
 
@@ -44,7 +45,7 @@ t_print	*create_print(char *str);
 char	*translate_characters(t_print *print, va_list args, char type);
 char	*translate_digits(t_print *print, va_list args);
 char	*translate_udigits(t_print *print, va_list args, char type);
+char	*translate_no(t_print *print);
 void	del_print(void *p);
 
 #endif
-
