@@ -6,7 +6,7 @@
 /*   By: hmacedo- <hmacedo-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:49:10 by hmacedo-          #+#    #+#             */
-/*   Updated: 2024/12/16 19:56:42 by hmacedo-         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:30:43 by hmacedo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,24 +132,8 @@ int	ft_printf(const char *format, ...)
 /*
 #include <stdio.h>
 
-void	show_matrix(char **matrix)
+int main ()
 {
-	while (*matrix)
-		printf("%s\n", *matrix++);
-}
-
-void	show_list(t_list *list)
-{
-	t_print	*print;
-
-	while(list)
-	{
-		print = (t_print  *) list->content;
-		printf("original: %s\n", print->original);
-		if (print->comand)
-			printf("comand: %c\n", print->comand->type);
-		else
-			printf("comand: (nill)\n");
-		list = list->next;
-	}
+	int res = ft_printf("um teste");
+	ft_printf("\n%d", res);
 }*/
